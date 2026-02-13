@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import API from "../utils/API";
+import AddTask from "./AddTask";
 
 const Home = () => {
   if (!localStorage.getItem("userId")) {
@@ -124,19 +125,6 @@ const deleteTask = async (id) => {
 };
 
 
-  // Add new task
-  const addTask = () => {
-    const newTask = {
-      id: Date.now(),
-      task: "New Action Item",
-      owner: "Assignee",
-      dueDate: new Date().toISOString().split("T")[0],
-      status: "Open",
-    };
-    setTasks([newTask, ...tasks]);
-    setEditingId(newTask.id);
-  };
-
   // Update task locally
   const updateTask = async (id, field, value) => {
     const updatedTask = tasks.map((t) => (t.id === id ? { ...t, [field]: value } : t));
@@ -186,7 +174,7 @@ const deleteTask = async (id) => {
               <button className={`btn btn-outline-secondary ${filter === "Open" ? "active" : ""}`} onClick={() => setFilter("Open")}>Open</button>
               <button className={`btn btn-outline-secondary ${filter === "Completed" ? "active" : ""}`} onClick={() => setFilter("Completed")}>Completed</button>
             </div>
-            <button className="btn btn-dark btn-sm" onClick={addTask}>Add Task</button>
+            <AddTask userId={userId} />
           </div>
           <div className="table-responsive">
             <table className="table align-middle mb-0">
@@ -267,7 +255,10 @@ const deleteTask = async (id) => {
           </div>
         </div>
       </div>
+
     </div>
+
+
   );
 };
 

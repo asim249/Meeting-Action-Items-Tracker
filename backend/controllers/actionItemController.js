@@ -1,5 +1,28 @@
 const ActionItem = require("../models/ActionItem");
 
+// add a task
+const addActionItem = async (req, res) => {
+  try {
+   const { task, owner, dueDate, transcriptId, userId } = req.body;
+    if (!task || !userId || !transcriptId) {
+      return res.status(400).json({ message: "Task, userId, and transcriptId are required" });
+    }
+    const newItem = await ActionItem.create({
+      task,
+      owner: owner || userId, // default owner = userId
+      dueDate: dueDate || null,
+      transcriptId,
+      userId,
+      status: "open", // default status
+    });
+
+    res.status(201).json(newItem);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Update single action item
 const updateActionItem = async (req, res) => {
   try {
@@ -28,4 +51,4 @@ const deleteActionItem = async (req, res) => {
   }
 };
 
-module.exports = { updateActionItem, deleteActionItem };
+module.exports = { updateActionItem, deleteActionItem, addActionItem };
